@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.CodeBase.AlarmStates
 {
-    public class AlarmReleasedState: IAlarmState
+    public class AlarmReleasedState : IAlarmState
     {
         private AudioSource _alarmSoundPlayer;
         private float _targetVolume;
@@ -26,7 +26,7 @@ namespace Assets.CodeBase.AlarmStates
             }
             else
             {
-                if (_alarmSoundPlayer.isPlaying) 
+                if (_alarmSoundPlayer.isPlaying)
                 {
                     _alarmSoundPlayer.Stop();
                 }

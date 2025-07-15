@@ -1,6 +1,5 @@
 ﻿using Assets.CodeBase.ThiefStates;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -45,17 +44,17 @@ public class Thief : MonoBehaviour
         _area.AlarmReleased -= OnAlarmReleased;
     }
 
-    private void OnAlarmReleased() 
+    private void OnAlarmReleased()
     {
         StartCoroutine(MoveDestination(_protectedAreaMovement));
     }
 
-    private void OnAlarmTriggered() 
+    private void OnAlarmTriggered()
     {
         StartCoroutine(MoveDestination(_escapeMovement));
     }
 
-    private IEnumerator MoveDestination(DestinationMovement movement) 
+    private IEnumerator MoveDestination(DestinationMovement movement)
     {
         YieldInstruction copeAlarm = new WaitForSeconds(_alarmSustainabilitySeconds);
 

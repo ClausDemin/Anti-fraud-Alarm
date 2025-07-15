@@ -1,7 +1,6 @@
 using Assets.CodeBase.AlarmStates;
 using Assets.CodeBase.AlarmStates.Interface;
 using System;
-using System.Collections;
 using UnityEngine;
 
 

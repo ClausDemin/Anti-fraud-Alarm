@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.CodeBase.AlarmStates
 {
-    public class AlarmedState: IAlarmState
+    public class AlarmedState : IAlarmState
     {
         private AudioSource _alarmSoundPlayer;
         private float _targetVolume;
@@ -16,17 +16,17 @@ namespace Assets.CodeBase.AlarmStates
             _volumeChangeRate = volumeChangeRate;
         }
 
-        public void ChangeVolumeLevel() 
+        public void ChangeVolumeLevel()
         {
             float volume = _alarmSoundPlayer.volume;
 
-            if (_alarmSoundPlayer.isPlaying == false) 
+            if (_alarmSoundPlayer.isPlaying == false)
             {
                 _alarmSoundPlayer.Play();
             }
 
-            if (volume < _targetVolume) 
-            { 
+            if (volume < _targetVolume)
+            {
                 _alarmSoundPlayer.volume = Mathf.MoveTowards(_alarmSoundPlayer.volume, _targetVolume, _volumeChangeRate * Time.fixedDeltaTime);
             }
         }
