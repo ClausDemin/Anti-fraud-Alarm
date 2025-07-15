@@ -1,10 +1,7 @@
-using Assets.CodeBase.AlarmStates;
-using Assets.CodeBase.AlarmStates.Interface;
 using System;
+using System.Collections;
 using UnityEngine;
 
-
-[RequireComponent(typeof(BoxCollider), typeof(AudioSource))]
 public class ProtectedArea : MonoBehaviour
 {
     [SerializeField, Min(0)] private float _alarmMinVolumeLevel = 0;
@@ -13,10 +10,6 @@ public class ProtectedArea : MonoBehaviour
 
     private AudioSource _alarm;
 
-    private IAlarmState _current;
-    private IAlarmState _alarmState;
-    private IAlarmState _releaseState;
-
     public event Action AlarmTriggered;
     public event Action AlarmReleased;
 
@@ -24,25 +17,15 @@ public class ProtectedArea : MonoBehaviour
     {
         _alarm = GetComponent<AudioSource>();
         _alarm.volume = _alarmMinVolumeLevel;
-
-        _releaseState = new AlarmReleasedState(_alarm, _alarmMinVolumeLevel, _alarmVolumeChangeSpeed);
-        _alarmState = new AlarmedState(_alarm, _alarmMaxVolumeLevel, _alarmVolumeChangeSpeed);
-
-        _current = _releaseState;
-    }
-
-    private void FixedUpdate()
-    {
-        _current.ChangeVolumeLevel();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<Thief>(out var thief))
         {
-            _current = _alarmState;
+            _alarm.Play();
 
-            AlarmTriggered?.Invoke();
+            StartCoroutine(ChangeAlarmVolume(_alarmMaxVolumeLevel));
         }
     }
 
@@ -50,9 +33,33 @@ public class ProtectedArea : MonoBehaviour
     {
         if (other.TryGetComponent<Thief>(out var thief))
         {
-            _current = _releaseState;
+            StartCoroutine(ChangeAlarmVolume(_alarmMinVolumeLevel));
+        }
+    }
 
+    private IEnumerator ChangeAlarmVolume(float targetVolume)
+    {
+        while (Mathf.Approximately(_alarm.volume, targetVolume) == false)
+        {
+            _alarm.volume = Mathf.MoveTowards(_alarm.volume, targetVolume, _alarmVolumeChangeSpeed * Time.deltaTime);
+
+            yield return null;
+        }
+
+        Notify();
+    }
+
+    private void Notify()
+    {
+        if (_alarm.volume == _alarmMaxVolumeLevel)
+        {
+            AlarmTriggered?.Invoke();
+        }
+        else if (_alarm.volume == _alarmMinVolumeLevel)
+        {
             AlarmReleased?.Invoke();
+
+            _alarm.Stop();
         }
     }
 }

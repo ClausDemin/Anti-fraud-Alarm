@@ -235,7 +235,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _area: {fileID: 1795594009}
   _escapePoint: {x: 15, y: 0, z: 40}
-  _alarmSustainabilitySeconds: 10
+  _alarmSustainabilitySeconds: 5
 --- !u!54 &129666782
 Rigidbody:
   m_ObjectHideFlags: 0
